@@ -1,6 +1,8 @@
 extern crate clap;
 #[macro_use]
 extern crate serde_derive;
+extern crate r2d2;
+extern crate r2d2_postgres;
 
 mod cargo_config;
 mod pg_helper;
