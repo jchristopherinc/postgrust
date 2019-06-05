@@ -1,17 +1,16 @@
-[hosts]
-total=2
-
 [pg]
+
 [pg.host1]
 host="localhost"
 port="5432"
-username=""
-password=""
-dbname=""
+username="latte"
+password="cappuccino"
+dbname="postgres"
 
-[pg.host2]
-host="localhost3"
-port="54323"
-username="postgres3"
-password="postgres3"
-dbname=""
+# UNCOMMENT the below section, if you have more than one PostgreSQL physical hosts
+#[pg.host2]
+#host="localhost"
+#port="5432"
+#username="latte"
+#password="cappuccino"
+#dbname="postgres"

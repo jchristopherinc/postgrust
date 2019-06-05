@@ -3,10 +3,10 @@ extern crate clap;
 extern crate serde_derive;
 
 mod cargo_config;
-mod postgres_config;
+mod pg_helper;
 
 use cargo_config::CargoConfig;
-use postgres_config::PostgresConfig;
+use pg_helper::PostgresConfig;
 
 use clap::{Arg, App};
 
@@ -23,18 +23,15 @@ fn main() {
             .long("--test")
             .default_value("true")
             .value_name("pg_test")
-            .help("Tests if connection to PostgreSQL database can be established"))
+            .help("Tests if connection to PostgreSQL database(s) can be established"))
         .get_matches_safe().unwrap_or_else(|e| e.exit());
+
+    // connection testing
     let test = matches.value_of("test").unwrap();
-
     if test == "true" {
-        println!("{}", test);
-    }
-
-    println!("PG DB");
-    println!("{:?}", pg_config.hosts.total);
-
-    for (_name, pg_host) in pg_config.pg {
-        println!("{:?}", pg_host.host)
+        println!("Initiatting PG connection test to all physical hosts");
+        for (_name, pg_host) in pg_config.pg {
+            PostgresConfig::test_connection(&pg_host);
+        }
     }
 }
