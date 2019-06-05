@@ -52,4 +52,13 @@ impl PostgresConfig {
 
         true
     }
+
+    pub fn execute_and_print_result(pg_host: &Host, query: &str) {
+        println!("Executing query {:?}", query);
+        // get connection from connection pool
+        let client = self::get_connection(pg_host).get().unwrap();
+        for row in &client.query(query, &[]).unwrap() {
+            println!("Found {:?}", row.len());
+        }
+    }
 }
