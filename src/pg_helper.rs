@@ -36,7 +36,9 @@ impl PostgresConfig {
 
         let conn = Connection::connect(pg_url, TlsMode::None).unwrap();
         for row in &conn.query("SELECT version()", &[]).unwrap() {
-            println!("Found {:?}", row);
+            let version: String = row.get("version");
+
+            println!("Found {:?}", version);
             println!("Connection to {:?} successful", name);
         }
 
