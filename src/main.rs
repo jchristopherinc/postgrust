@@ -29,9 +29,9 @@ fn main() {
     // connection testing
     let test = matches.value_of("test").unwrap();
     if test == "true" {
-        println!("Initiatting PG connection test to all physical hosts");
-        for (_name, pg_host) in pg_config.pg {
-            PostgresConfig::test_connection(&pg_host);
+        println!("Initiating PG connection test to all physical hosts");
+        for (name, pg_host) in pg_config.pg {
+            PostgresConfig::test_connection(&name, &pg_host);
         }
     }
 }

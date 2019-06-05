@@ -29,14 +29,15 @@ impl PostgresConfig {
     }
 
     //TODO: use connection pool from r2d2
-    pub fn test_connection(pg_host: &Host) -> bool {
-        println!("Connecting to {:?}", pg_host.host);
+    pub fn test_connection(name: &String, pg_host: &Host) -> bool {
+        println!("Connecting to {:?}", name);
 
         let pg_url = format!("postgres://{}:{}@{}:{}/{}", pg_host.username, pg_host.password, pg_host.host, pg_host.port, pg_host.dbname);
 
         let conn = Connection::connect(pg_url, TlsMode::None).unwrap();
         for row in &conn.query("SELECT version()", &[]).unwrap() {
             println!("Found {:?}", row);
+            println!("Connection to {:?} successful", name);
         }
 
         true
