@@ -59,10 +59,11 @@ fn main() {
     }
 
 
-    let query_match = value_t!(matches.value_of("query"), Query).unwrap_or_else(|e| e.exit());
+    if matches.occurrences_of("query") > 0 {
+        let query_match = value_t!(matches.value_of("query"), Query).unwrap_or_else(|e| e.exit());
 
-    //should change it to hashmap
-    let dummy_query = "SELECT
+        //should change it to hashmap
+        let dummy_query = "SELECT
                               datname,
                               usename,
                               client_addr,
@@ -74,10 +75,11 @@ fn main() {
                             WHERE state = 'active'
                             ORDER BY time_taken DESC;";
 
-    for (_name, pg_host) in &pg_config.pg {
-        match query_match {
-            Query::active_queries => PostgresConfig::execute_and_print_result(&pg_host, &dummy_query),
-            Query::seq_scans => println!("Sequential Scans")
+        for (_name, pg_host) in &pg_config.pg {
+            match query_match {
+                Query::active_queries => PostgresConfig::execute_and_print_result(&pg_host, &dummy_query),
+                Query::seq_scans => println!("Sequential Scans")
+            }
         }
     }
 }
