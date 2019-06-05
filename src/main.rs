@@ -12,6 +12,7 @@ use cargo_config::CargoConfig;
 use pg_helper::PostgresConfig;
 
 use clap::{Arg, App};
+use std::string::String;
 
 /*
  this enum values are lower_snake_cased as against Rust's convention of CamelCase, because for CLI snake case is much easier.
@@ -22,6 +23,14 @@ arg_enum!{
     enum Query {
         seq_scans,
         active_queries
+    }
+}
+
+// casting non-text fields to text to circumvent type casting problem when parsing resultset.
+fn execute_query(query_match: &Query) -> &str {
+    match query_match {
+        Query::active_queries => return "SELECT datname, usename, text(client_addr), text(now() - query_start) AS time_taken, query, text(pid), state FROM pg_stat_activity ac WHERE state = 'active' ORDER BY time_taken DESC;",
+        Query::seq_scans => return "Select version();"
     }
 }
 
@@ -63,21 +72,11 @@ fn main() {
         let query_match = value_t!(matches.value_of("query"), Query).unwrap_or_else(|e| e.exit());
 
         //should change it to hashmap
-        let dummy_query = "SELECT
-                              datname,
-                              usename,
-                              client_addr,
-                              now() - query_start AS time_taken,
-                              query,
-                              pid,
-                              state
-                            FROM pg_stat_activity ac
-                            WHERE state = 'active'
-                            ORDER BY time_taken DESC;";
+        let matching_query = self::execute_query(&query_match);
 
         for (_name, pg_host) in &pg_config.pg {
             match query_match {
-                Query::active_queries => PostgresConfig::execute_and_print_result(&pg_host, &dummy_query),
+                Query::active_queries => PostgresConfig::execute_and_print_result(&pg_host, &matching_query),
                 Query::seq_scans => println!("Sequential Scans")
             }
         }

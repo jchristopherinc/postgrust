@@ -54,11 +54,24 @@ impl PostgresConfig {
     }
 
     pub fn execute_and_print_result(pg_host: &Host, query: &str) {
-        println!("Executing query {:?}", query);
         // get connection from connection pool
         let client = self::get_connection(pg_host).get().unwrap();
         for row in &client.query(query, &[]).unwrap() {
-            println!("Found {:?}", row.len());
+
+            //TODO: For the first time, print column names..
+            for col in row.columns() {
+                let val: String = row.get(col.name());
+
+                println!("{:?}", val);
+            }
+
+            println!("\n");
+
+//            for i in 0..row.len() {
+//                let val: String = row.get(i);
+//
+//                println!("{:?}", val);
+//            }
         }
     }
 }
