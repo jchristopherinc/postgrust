@@ -27,7 +27,7 @@ arg_enum!{
 }
 
 // casting non-text fields to text to circumvent type casting problem when parsing resultset.
-fn execute_query(query_match: &Query) -> &str {
+fn get_matching_query(query_match: &Query) -> &str {
     match query_match {
         Query::active_queries => return "SELECT datname, usename, text(client_addr), text(now() - query_start) AS time_taken, query, text(pid), state FROM pg_stat_activity ac WHERE state = 'active' ORDER BY time_taken DESC;",
         Query::seq_scans => return "Select version();"
@@ -69,16 +69,12 @@ fn main() {
 
 
     if matches.occurrences_of("query") > 0 {
-        let query_match = value_t!(matches.value_of("query"), Query).unwrap_or_else(|e| e.exit());
 
-        //should change it to hashmap
-        let matching_query = self::execute_query(&query_match);
+        let matching_query_arg = value_t!(matches.value_of("query"), Query).unwrap_or_else(|e| e.exit());
+        let matching_query = self::get_matching_query(&matching_query_arg);
 
         for (_name, pg_host) in &pg_config.pg {
-            match query_match {
-                Query::active_queries => PostgresConfig::execute_and_print_result(&pg_host, &matching_query),
-                Query::seq_scans => println!("Sequential Scans")
-            }
+            PostgresConfig::execute_and_print_result(&pg_host, &matching_query)
         }
     }
 }
