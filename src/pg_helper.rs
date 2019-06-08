@@ -33,7 +33,7 @@ fn get_connection(pg_host: &Host) -> Pool {
 impl PostgresConfig {
     pub fn new() -> Result<Self, config::ConfigError> {
         let mut s = config::Config::new();
-        s.merge(config::File::with_name("PGConfig")).unwrap();
+        s.merge(config::File::with_name("/usr/local/postgrust/PGConfig")).unwrap();
         s.try_into()
     }
 

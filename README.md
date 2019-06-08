@@ -16,3 +16,8 @@ OPTIONS:
 -q, --query <query>     Query to be executed [possible values: seq_scans, active_queries]
 -t, --test <pg_test>    Tests if connection to PostgreSQL database(s) can be established [default: true]
 ```
+
+
+To run with your config,
+
+Copy paste `PGConfig.toml` to `/usr/local/postgrust` with the same name and make necessary changes. 
