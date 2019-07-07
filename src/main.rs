@@ -6,10 +6,10 @@ extern crate r2d2;
 extern crate r2d2_postgres;
 
 mod cargo_config;
-mod pg_helper;
+mod sql;
 
 use cargo_config::CargoConfig;
-use pg_helper::PostgresConfig;
+use sql::pg::PostgresConfig;
 
 use clap::{Arg, App};
 use std::string::String;

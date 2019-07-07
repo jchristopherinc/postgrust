@@ -66,12 +66,6 @@ impl PostgresConfig {
             }
 
             println!("\n");
-
-//            for i in 0..row.len() {
-//                let val: String = row.get(i);
-//
-//                println!("{:?}", val);
-//            }
         }
     }
 }
