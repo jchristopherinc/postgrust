@@ -7,7 +7,8 @@ extern crate diesel;
 
 mod cargo_config;
 mod pg_conn;
-//mod version;
+mod host;
+mod version;
 
 use cargo_config::CargoConfig;
 use pg_conn::PostgresConfig;

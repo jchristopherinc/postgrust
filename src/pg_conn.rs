@@ -7,30 +7,15 @@ use diesel::pg::PgConnection;
 use diesel::sql_query;
 use diesel::Connection;
 use diesel::RunQueryDsl;
-
-use diesel::sql_types::{Text};
 use std::result::Result::Ok;
 use std::result::Result::Err;
-use std::vec::Vec;
 
-#[derive(Debug, Deserialize)]
-pub struct Host {
-    pub host: String,
-    pub port: String,
-    pub username: String,
-    pub password: String,
-    pub dbname: String
-}
+use super::version::Version;
+use super::host::Host;
 
 #[derive(Debug, Deserialize)]
 pub struct PostgresConfig {
     pub pg: HashMap<String, Host>
-}
-
-#[derive(Debug, QueryableByName)]
-pub struct Version {
-    #[sql_type="Text"]
-    pub version: String
 }
 
 fn get_connection(pg_host: &Host) -> PgConnection {
@@ -58,7 +43,7 @@ impl PostgresConfig {
         match result {
             Ok(v) => {
                 let pg_version = &v[0];
-                println!("Connecting to Postgres. PG Version: {:?}", pg_version.version)
+                println!("Connecting to Postgres. PG Version: {:?}", pg_version.version);
             },
             Err(e) => println!("error testing connection: {:?}", e),
         }
