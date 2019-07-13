@@ -13,6 +13,7 @@ use std::result::Result::Err;
 use super::version::Version;
 use super::host::Host;
 use super::active_queries::ActiveQueries;
+use super::sequential_scans::SequentialScans;
 
 #[derive(Debug, Deserialize)]
 pub struct PostgresConfig {
@@ -57,8 +58,19 @@ impl PostgresConfig {
         // get connection from connection pool
         let connection = self::get_connection(pg_host);
 
-        let result = sql_query("SELECT datname, usename, client_addr, now() - query_start AS time_taken, query, pid, state FROM pg_stat_activity ac WHERE state = 'active' ORDER BY time_taken DESC;")
+        let result = sql_query("SELECT datname, usename, client_addr, now() - query_start AS time_taken, query, pid, state FROM pg_stat_activity ac WHERE state = 'active' ORDER BY time_taken DESC; ")
             .get_result::<ActiveQueries>(&connection);
+
+        println!("Result: {:?}", result);
+    }
+
+    pub fn sequential_scans(pg_host: &Host) {
+
+        // get connection from connection pool
+        let connection = self::get_connection(pg_host);
+
+        let result = sql_query("SELECT relname, seq_scan FROM pg_stat_user_tables ORDER BY seq_scan DESC; ")
+            .get_result::<SequentialScans>(&connection);
 
         println!("Result: {:?}", result);
     }

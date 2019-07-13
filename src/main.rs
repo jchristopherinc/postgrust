@@ -13,6 +13,7 @@ mod pg_query;
 mod host;
 mod version;
 mod active_queries;
+mod sequential_scans;
 
 use cargo_config::CargoConfig;
 use pg_query::PostgresConfig;
@@ -70,7 +71,7 @@ fn main() {
                     PostgresConfig::active_queries(&pg_host);
                 },
                 Query::SeqScans => {
-                    PostgresConfig::active_queries(&pg_host); //TODO: fix it once active_queries work
+                    PostgresConfig::sequential_scans(&pg_host); //TODO: fix it once active_queries work
                 }
             }
         }
