@@ -9,13 +9,13 @@ extern crate ipnetwork;
 extern crate chrono;
 
 mod cargo_config;
-mod pg_conn;
+mod pg_query;
 mod host;
 mod version;
 mod active_queries;
 
 use cargo_config::CargoConfig;
-use pg_conn::PostgresConfig;
+use pg_query::PostgresConfig;
 
 use clap::{Arg, App};
 use std::string::String;
