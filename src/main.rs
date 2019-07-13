@@ -2,14 +2,20 @@
 extern crate clap;
 #[macro_use]
 extern crate serde_derive;
-extern crate r2d2;
-extern crate r2d2_postgres;
+extern crate serde;
+#[macro_use]
+extern crate diesel;
+extern crate ipnetwork;
+extern crate chrono;
 
 mod cargo_config;
-mod sql;
+mod pg_conn;
+mod host;
+mod version;
+mod active_queries;
 
 use cargo_config::CargoConfig;
-use sql::pg::PostgresConfig;
+use pg_conn::PostgresConfig;
 
 use clap::{Arg, App};
 use std::string::String;
@@ -23,14 +29,6 @@ arg_enum!{
     enum Query {
         seq_scans,
         active_queries
-    }
-}
-
-// casting non-text fields to text to circumvent type casting problem when parsing resultset.
-fn get_matching_query(query_match: &Query) -> &str {
-    match query_match {
-        Query::active_queries => return "SELECT datname, usename, text(client_addr), text(now() - query_start) AS time_taken, query, text(pid), state FROM pg_stat_activity ac WHERE state = 'active' ORDER BY time_taken DESC;",
-        Query::seq_scans => return "Select version();"
     }
 }
 
@@ -67,14 +65,18 @@ fn main() {
         }
     }
 
-
     if matches.occurrences_of("query") > 0 {
-
         let matching_query_arg = value_t!(matches.value_of("query"), Query).unwrap_or_else(|e| e.exit());
-        let matching_query = self::get_matching_query(&matching_query_arg);
 
         for (_name, pg_host) in &pg_config.pg {
-            PostgresConfig::execute_and_print_result(&pg_host, &matching_query)
+            match matching_query_arg {
+                Query::active_queries => {
+                    PostgresConfig::active_queries(&pg_host);
+                },
+                Query::seq_scans => {
+                    PostgresConfig::active_queries(&pg_host); //TODO: fix it once active_queries work
+                }
+            }
         }
     }
 }
