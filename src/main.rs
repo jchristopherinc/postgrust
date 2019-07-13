@@ -2,14 +2,15 @@
 extern crate clap;
 #[macro_use]
 extern crate serde_derive;
-extern crate r2d2;
-extern crate r2d2_postgres;
+#[macro_use]
+extern crate diesel;
 
 mod cargo_config;
-mod sql;
+mod pg_conn;
+//mod version;
 
 use cargo_config::CargoConfig;
-use sql::pg::PostgresConfig;
+use pg_conn::PostgresConfig;
 
 use clap::{Arg, App};
 use std::string::String;
