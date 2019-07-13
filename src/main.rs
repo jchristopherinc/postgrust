@@ -20,15 +20,11 @@ use pg_query::PostgresConfig;
 use clap::{Arg, App};
 use std::string::String;
 
-/*
- this enum values are lower_snake_cased as against Rust's convention of CamelCase, because for CLI snake case is much easier.
- Will keep it this way till I find a better approach.
- */
 arg_enum!{
     #[derive(Debug)]
     enum Query {
-        seq_scans,
-        active_queries
+        SeqScans,
+        ActiveQueries
     }
 }
 
@@ -70,10 +66,10 @@ fn main() {
 
         for (_name, pg_host) in &pg_config.pg {
             match matching_query_arg {
-                Query::active_queries => {
+                Query::ActiveQueries => {
                     PostgresConfig::active_queries(&pg_host);
                 },
-                Query::seq_scans => {
+                Query::SeqScans => {
                     PostgresConfig::active_queries(&pg_host); //TODO: fix it once active_queries work
                 }
             }

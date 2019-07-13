@@ -7,9 +7,6 @@ use diesel::pg::PgConnection;
 use diesel::sql_query;
 use diesel::Connection;
 use diesel::RunQueryDsl;
-use diesel::ExpressionMethods;
-use diesel::query_dsl::filter_dsl::FilterDsl;
-use diesel::QueryDsl;
 use std::result::Result::Ok;
 use std::result::Result::Err;
 
