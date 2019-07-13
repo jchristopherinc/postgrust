@@ -24,5 +24,5 @@ Copy paste `PGConfig.toml` to `/usr/local/postgrust` with the same name and make
 
 #### Supported Operations
 
--[x] active queries `-q ActiveQueries`
--[x] sequential scan `-q SeqScans`
+- [x] active queries `-q ActiveQueries`
+- [x] sequential scan `-q SeqScans`
