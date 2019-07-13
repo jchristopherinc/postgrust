@@ -9,5 +9,7 @@ config = "0.9"
 clap = "2.33.0"
 serde_derive = "^1.0.8"
 serde = "1.0.8"
-diesel = { version = "1.0.0", features = ["postgres"] }
+diesel = { version = "1.4.2", features = ["postgres", "network-address", "chrono"]}
 dotenv = "0.9.0"
+ipnetwork = "0.13.1"
+chrono = "0.4"
